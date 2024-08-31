@@ -1,0 +1,2 @@
+# Configuración para asegurarse de que los finales de línea sean LF en todos los archivos
+* text=auto eol=lf
