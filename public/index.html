@@ -1,117 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link rel="stylesheet" href="/css/index.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/index.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://sdk.mercadopago.com/js/v2"></script>
+  <script src="/js/index.js" defer></script>
 </head>
 <body>
-    <div class="contenedor-titulo">
-        <h1 class="titulo-listado">Botellas Pet</h1>
+  <main>
+    <!-- Shopping Cart -->
+    <section class="shopping-cart dark">
+      <div class="container">
+        <div class="block-heading">
+          <h2>Shopping Cart</h2>
+        </div>
+        <div class="content">
+          <div class="row">
+            <div class="col-md-8">
+              <table class="product-table">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td id="product-description">Botella Pet Premium 500ml</td> <!-- Elemento añadido -->
+                    <td>$<span id="unit-price">179</span></td>
+                    <td>
+                      <input type="number" id="quantity" value="1" min="1">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-md-4">
+              <div class="summary">
+                <h3>Cart Summary</h3>
+                <div class="summary-item">
+                  <span class="text">Subtotal:</span>
+                  <span id="cart-total">$179</span>
+                </div>
+                <div class="summary-item">
+                  <span class="text">Price per unit:</span>
+                  <span id="summary-price">$179</span>
+                </div>
+                <div class="summary-item">
+                  <span class="text">Quantity:</span>
+                  <span id="summary-quantity">1</span>
+                </div>
+                <div class="summary-item">
+                  <span class="text">Total:</span>
+                  <span id="summary-total">$179</span>
+                </div>
+                <button class="btn btn-primary btn-lg btn-block" id="checkout-btn">Checkout</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Payment Section -->
+    <section class="payment-form dark">
+      <div class="container">
+        <div class="block-heading">
+          <h2>Checkout Payment</h2>
+        </div>
+        <div class="form-payment">
+          <div id="wallet_container"></div>
+          <div id="button-checkout"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer_logo">
+      <img id="horizontal_logo" alt="Logo" src="img/horizontal_logo.png">
     </div>
-
-    <button id="ver-carrito" style="display: none;" onclick="verCarrito()">Ver Carrito</button>
-
-    <!-- Tabla para Botellas Eco EWH -->
-    <table>
-        <thead>
-            <tr>
-                <th>Botellas Eco</th>
-                <th>Precio</th>
-                <th>Acción</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Botella eco de 255ml</td>
-                <td>49</td>
-                <td><button class="agregar-carro" onclick="agregarAlCarro('Botella eco de 255ml', 49)">Agregar al carro</button></td>
-            </tr>
-            <tr>
-                <td>Botella eco de 500ml</td>
-                <td>79</td>
-                <td><button class="agregar-carro" onclick="agregarAlCarro('Botella eco de 500ml', 79)">Agregar al carro</button></td>
-            </tr>
-            <tr>
-                <td>Botella eco de 1L</td>
-                <td>99</td>
-                <td><button class="agregar-carro" onclick="agregarAlCarro('Botella eco de 1L', 99)">Agregar al carro</button></td>
-            </tr>
-            <tr>
-                <td>Botella eco de 1.5L</td>
-                <td>129</td>
-                <td><button class="agregar-carro" onclick="agregarAlCarro('Botella eco de 1.5L', 129)">Agregar al carro</button></td>
-            </tr>
-        </tbody>
-    </table>
-
-    <!-- Tabla para Botellas Premium EWH -->
-    <table>
-        <thead>
-            <tr>
-                <th>Botellas Premium</th>
-                <th>Precio</th>
-                <th>Acción</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Botella premium de 255ml</td>
-                <td>149</td>
-                <td><button class="agregar-carro" onclick="agregarAlCarro('Botella premium de 255ml', 149)">Agregar al carro</button></td>
-            </tr>
-            <tr>
-                <td>Botella premium de 500ml</td>
-                <td>179</td>
-                <td><button class="agregar-carro" onclick="agregarAlCarro('Botella premium de 500ml', 179)">Agregar al carro</button></td>
-            </tr>
-            <tr>
-                <td>Botella premium de 1L</td>
-                <td>199</td>
-                <td><button class="agregar-carro" onclick="agregarAlCarro('Botella premium de 1L', 199)">Agregar al carro</button></td>
-            </tr>
-            <tr>
-                <td>Botella premium de 1.5L</td>
-                <td>229</td>
-                <td><button class="agregar-carro" onclick="agregarAlCarro('Botella premium de 1.5L', 229)">Agregar al carro</button></td>
-            </tr>
-        </tbody>
-    </table>
-
-    <script>
-        function agregarAlCarro(producto, precio) {
-            const item = {
-                producto: producto,
-                precio: precio,
-                cantidad: 1
-            };
-
-            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-
-            const existe = carrito.find(p => p.producto === producto);
-            if (existe) {
-                existe.cantidad += 1; 
-            } else {
-                carrito.push(item); 
-            }
-
-            localStorage.setItem('carrito', JSON.stringify(carrito));
-
-            document.getElementById('ver-carrito').style.display = 'block';
-            alert("Se agregó el producto " + producto);
-        }
-
-        function verCarrito() {
-            window.location.href = '/templates/carrito.html';
-        }
-
-        window.onload = function() {
-            const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-            if (carrito.length > 0) {
-                document.getElementById('ver-carrito').style.display = 'block';
-            }
-        };
-    </script>
+    <div class="footer_text">
+      <p>Developers Site:</p>
+      <p><a href="https://developers.mercadopago.com" target="_blank">https://developers.mercadopago.com</a></p>
+    </div>
+  </footer>
 </body>
 </html>

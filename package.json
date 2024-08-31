@@ -2,9 +2,9 @@
   "name": "desafio1_mp",
   "version": "1.0.0",
   "description": "prueba de checkout pro de mercado pago",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node server.js",
     "test": "npm start"
   },
   "author": "EdyWasHere",
