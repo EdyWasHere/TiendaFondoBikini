@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+</head>
+<body>
+    <h1>Carrito de Compras</h1>
+    <table id="carrito-table">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody id="carrito-items"></tbody>
+    </table>
+
+    <div id="totales">
+        <p>Subtotal: $<span id="subtotal">0.00</span></p>
+        <p>IVA (16%): $<span id="iva">0.00</span></p>
+        <p>Total: $<span id="total">0.00</span></p>
+    </div>
+
+    <button onclick="volver()">Volver</button>
+    <button onclick="mostrar()" id="proceder-pago">proceder a pago</button>
+    <div id="wallet_container"></div>
+
+    <script>
+        let hola = null; // Variable para almacenar la respuesta de crearPreferencia
+
+        function cargarCarrito() {
+            const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            const carritoItems = document.getElementById('carrito-items');
+            carritoItems.innerHTML = '';
+
+            let subtotal = 0;
+
+            carrito.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.producto}</td>
+                    <td>${item.precio}</td>
+                    <td>${item.cantidad}</td>
+                    <td>
+                        <button onclick="modificarCantidad(${index}, 1)">+</button>
+                        <button onclick="modificarCantidad(${index}, -1)">-</button>
+                    </td>
+                `;
+                carritoItems.appendChild(row);
+
+                subtotal += item.precio * item.cantidad;
+            });
+
+            const iva = subtotal * 0.16;
+            const total = subtotal + iva;
+
+            document.getElementById('subtotal').textContent = subtotal.toFixed(2);
+            document.getElementById('iva').textContent = iva.toFixed(2);
+            document.getElementById('total').textContent = total.toFixed(2);
+        }
+
+        function modificarCantidad(index, cambio) {
+            let carrito = JSON.parse(localStorage.getItem('carrito'));
+            carrito[index].cantidad += cambio;
+
+            if (carrito[index].cantidad === 0) {
+                carrito.splice(index, 1);
+            }
+
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+            cargarCarrito();
+        }
+
+        function volver() {
+            window.location.href = 'index.html';
+        }
+
+        async function crearPreferencia() {
+            const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            
+            const productos = carrito.map(item => ({
+              title: item.producto,
+              unit_price: item.precio,
+              quantity: item.cantidad
+            }));
+          
+            console.log("Enviando carrito:", productos);
+          
+            try {
+              const response = await fetch('/crear-preferencia', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ carrito: productos })
+              });
+          
+              if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Error en la solicitud de preferencia:', {
+                  status: response.status,
+                  statusText: response.statusText,
+                  error: errorText
+                });
+                return;
+              }
+              
+              const data = await response.json(); // Asegúrate de usar await aquí
+              console.log("Respuesta de crearPreferencia:", data); // Imprime el objeto recibido
+              return data; // Retorna el objeto JSON
+          
+            } catch (error) {
+              console.error('Error al realizar la solicitud:', error);
+            }
+          }
+
+
+        function mostrar(){
+            boton = document.getElementById('proceder-pago');
+            boton.hidden = true;
+            const mp = new MercadoPago('APP_USR-a7edb66d-915e-4fd6-bcb0-2d935675dc96');
+            const bricksBuilder = mp.bricks();
+
+            mp.bricks().create("wallet", "wallet_container", {
+                initialization: {
+                    preferenceId: id,
+                },
+            customization: {
+            texts: {
+            valueProp: 'smart_option',
+            },
+            },
+            });
+        }
+          
+
+        // Asegúrate de que la función sea async
+        window.onload = async function() {
+            cargarCarrito();
+            id = crearPreferencia();
+        };
+    </script>
+</body>
+</html>

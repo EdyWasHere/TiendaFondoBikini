@@ -1,0 +1,17 @@
+{
+  "name": "desafio1_mp",
+  "version": "1.0.0",
+  "description": "prueba de checkout pro de mercado pago",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "npm start"
+  },
+  "author": "EdyWasHere",
+  "license": "ISC",
+  "dependencies": {
+    "@mercadopago/sdk-react": "^0.0.19",
+    "express": "^4.19.2",
+    "mercadopago": "^2.0.14"
+  }
+}

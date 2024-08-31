@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagar</title>
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+</head>
+<body>
+    <div id="wallet_container"></div>
+    <script>
+        const mp = new MercadoPago('APP_USR-a7edb66d-915e-4fd6-bcb0-2d935675dc96');
+        const bricksBuilder = mp.bricks();
+
+        mp.bricks().create("wallet", "wallet_container", {
+            initialization: {
+                preferenceId: "87084590-4063079f-69b9-4b6a-993b-0d21df285701",
+            },
+        customization: {
+        texts: {
+        valueProp: 'smart_option',
+        },
+        },
+        });
+ 
+    </script>
+</body>
+</html>

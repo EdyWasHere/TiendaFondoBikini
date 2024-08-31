@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+    <div class="contenedor-titulo">
+        <h1 class="titulo-listado">Botellas Pet</h1>
+    </div>
+
+    <button id="ver-carrito" style="display: none;" onclick="verCarrito()">Ver Carrito</button>
+
+    <!-- Tabla para Botellas Eco EWH -->
+    <table>
+        <thead>
+            <tr>
+                <th>Botellas Eco</th>
+                <th>Precio</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Botella eco de 255ml</td>
+                <td>49</td>
+                <td><button class="agregar-carro" onclick="agregarAlCarro('Botella eco de 255ml', 49)">Agregar al carro</button></td>
+            </tr>
+            <tr>
+                <td>Botella eco de 500ml</td>
+                <td>79</td>
+                <td><button class="agregar-carro" onclick="agregarAlCarro('Botella eco de 500ml', 79)">Agregar al carro</button></td>
+            </tr>
+            <tr>
+                <td>Botella eco de 1L</td>
+                <td>99</td>
+                <td><button class="agregar-carro" onclick="agregarAlCarro('Botella eco de 1L', 99)">Agregar al carro</button></td>
+            </tr>
+            <tr>
+                <td>Botella eco de 1.5L</td>
+                <td>129</td>
+                <td><button class="agregar-carro" onclick="agregarAlCarro('Botella eco de 1.5L', 129)">Agregar al carro</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Tabla para Botellas Premium EWH -->
+    <table>
+        <thead>
+            <tr>
+                <th>Botellas Premium</th>
+                <th>Precio</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Botella premium de 255ml</td>
+                <td>149</td>
+                <td><button class="agregar-carro" onclick="agregarAlCarro('Botella premium de 255ml', 149)">Agregar al carro</button></td>
+            </tr>
+            <tr>
+                <td>Botella premium de 500ml</td>
+                <td>179</td>
+                <td><button class="agregar-carro" onclick="agregarAlCarro('Botella premium de 500ml', 179)">Agregar al carro</button></td>
+            </tr>
+            <tr>
+                <td>Botella premium de 1L</td>
+                <td>199</td>
+                <td><button class="agregar-carro" onclick="agregarAlCarro('Botella premium de 1L', 199)">Agregar al carro</button></td>
+            </tr>
+            <tr>
+                <td>Botella premium de 1.5L</td>
+                <td>229</td>
+                <td><button class="agregar-carro" onclick="agregarAlCarro('Botella premium de 1.5L', 229)">Agregar al carro</button></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function agregarAlCarro(producto, precio) {
+            const item = {
+                producto: producto,
+                precio: precio,
+                cantidad: 1
+            };
+
+            let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+
+            const existe = carrito.find(p => p.producto === producto);
+            if (existe) {
+                existe.cantidad += 1; 
+            } else {
+                carrito.push(item); 
+            }
+
+            localStorage.setItem('carrito', JSON.stringify(carrito));
+
+            document.getElementById('ver-carrito').style.display = 'block';
+            alert("Se agregó el producto " + producto);
+        }
+
+        function verCarrito() {
+            window.location.href = '/templates/carrito.html';
+        }
+
+        window.onload = function() {
+            const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+            if (carrito.length > 0) {
+                document.getElementById('ver-carrito').style.display = 'block';
+            }
+        };
+    </script>
+</body>
+</html>
